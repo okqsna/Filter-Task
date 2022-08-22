@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <style>
+        *{
+            margin:0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .wrap{
+            width: 100%;
+            min-height: 100vh;
+        }
+        .userContainer{
+            width: 100%;
+            font-family: 'Poppins';
+          
+        }
+        .userContainer div{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding:10px;
+            margin: 10px 0;
+        }
+        .userContainer div:nth-child(2n){
+            background-color: #eee;
+        }
+        .userContainer div:hover{
+            background-color: lightgreen;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .inputs{
+            border:none;
+            outline: none;
+            box-shadow: 0 0 10px #bbb;
+            padding: 10px;
+            width: 50px;
+            margin:10px;
+            border-radius: 5px;
+            color: dodgerblue;
+            font-family: 'Poppins';
+        }
+        .inputs::placeholder{
+            color: dodgerblue;
+        }
+        .btn{
+        color: #fff;
+        background-color: dodgerblue;
+        border: none;
+        padding: 10px;
+        width: 70px;
+        border-radius: 5px;
+        box-shadow: 0 5px 10 dodgerblue;
+        font-family: 'Poppins';
+        }
+        .btnSort{
+        color: #fff;
+        background-color: dodgerblue;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 5px 10 dodgerblue;
+        width: 150px;
+        font-family: 'Poppins';
+        }
+        .btnClear{
+        color: #fff;
+        background-color: dodgerblue;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 5px 10 dodgerblue;
+        width: 170px;
+        font-family: 'Poppins';
+        }
+        #maxValueBtn{
+        color: #fff;
+        background-color: dodgerblue;
+        border: none;
+        padding: 10px;
+        width: 100px;
+        height: 40px;
+        border-radius: 5px;
+        box-shadow: 0 5px 10 dodgerblue;
+        font-family: 'Poppins';
+        }
+        .inputLetter{
+            border:none;
+            outline: none;
+            box-shadow: 0 0 10px #bbb;
+            padding: 10px;
+            width: 95px;
+            margin:10px;
+            border-radius: 5px;
+            color: dodgerblue;
+            font-family: 'Poppins';
+        }
+        .inputLetter::placeholder{
+            color: dodgerblue;
+        }
+        #lengthValue{
+            font-family: 'Poppins';
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapp">
+        <input type="text" id="minAge" class="inputs" placeholder="min">
+        <input type="text" id="maxAge" class="inputs" placeholder="max">
+        <button id="applyBtn" class="btn">apply</button>
+        <input type="range" min="30" max="200" step="1" id="lengthInput">
+        <span id="lengthValue"></span>
+         <input type="text" id="startLetter" class="inputLetter" placeholder="type letter">
+         <button id="letterBtn" class="btn">look</button>
+        <button id="sortBtn" class="btnSort">Sort by code</button>
+        <button id="sortBtnA" class="btnSort">Sort by name</button>
+        <button id="clearContainer" class="btnClear">Clear container</button>
+        <div class="userContainer">
+            
+        </div>
+    </div>
+    <script>
+        let db = [{
+                name: 'Victor',
+                code: 1601416,
+                age: 14,
+                length: 160,
+                weight: 42,
+                money: 252
+            },
+            {
+                name: 'Taras',
+                code: 1423243,
+                age: 19,
+                length: 180,
+                weight: 50,
+                money: 1000
+            },
+            {
+                name: 'Alex',
+                code: 4533333,
+                age: 10,
+                length: 110,
+                weight: 45,
+                money: 10
+            },
+            {
+                name: 'Nastya',
+                code: 89878789,
+                age: 20,
+                length: 160,
+                weight: 60,
+                money: 776
+            },
+            {
+                name: 'Oleg',
+                code: 66787998,
+                age: 30,
+                length: 180,
+                weight: 90,
+                money: 12323
+            },
+            {
+                name: 'Valera',
+                code: 76787876,
+                age: 17,
+                length: 190,
+                weight: 110,
+                money: 12
+            },
+            {
+                name: 'John',
+                code: 34343422,
+                age: 9,
+                length: 90,
+                weight: 30,
+                money: 776
+            },
+            {
+                name: 'Yura',
+                code: 7888765,
+                age: 14,
+                length: 150,
+                weight: 56,
+                money: 8998
+            },
+            {
+                name: 'Andrii',
+                code: 8898788,
+                age: 18,
+                length: 170,
+                weight: 77,
+                money: 677
+            },
+            {
+                name: 'Yulia',
+                code: 1215456,
+                age: 7,
+                length: 80,
+                weight: 34,
+                money: 0
+            }
+        ];
+        for(let i=0; i<db.length;i++){
+        $('.userContainer').append(`<div class='userItem' id='c${db[i].code}'>
+        <span>${db[i].code}</span>
+        <span>${db[i].name}</span>
+        <span>${db[i].age}</span>
+        </div>`);
+    
+     }
+      $('.userItem').click(function(e){
+        let userID=(e.target.id).substring(1);
+        for(let i=0; i<db.length; i++){
+            if(db[i].code==userID){
+                alert(db[i].money+'$');
+            }
+        }
+      });
+      $('#applyBtn').click(function(){
+        let minAge=$('#minAge').val();
+        let maxAge=$('#maxAge').val();
+        $('.userContainer').empty();
+        for(let i=0; i<db.length;i++){
+            if(db[i].age>=minAge && db[i].age<=maxAge){
+                $('.userContainer').append(`<div class='userItem' id='c${db[i].code}'>
+                <span>${db[i].code}</span>
+                <span>${db[i].name}</span>
+                <span>${db[i].age}</span>
+                </div>`);
+            }
+        
+         }
+      });
+      $('#letterBtn').click(function(){
+        let startLetter=$('#startLetter').val();
+        $('.userContainer').empty();
+        for(let i=0; i<db.length; i++){
+            if(db[i].name.at(0)==startLetter){
+                $('.userContainer').append(`<div class='userItem' id='c${db[i].code}'>
+                <span>${db[i].code}</span>
+                <span>${db[i].name}</span>
+                <span>${db[i].age}</span>
+                </div>`);
+            }
+        }
+      });
+      $('#lengthInput').on('input', function(){
+        let currentLen=$('#lengthInput').val();
+        $('#lengthValue').text(currentLen);
+        $('.userContainer').empty();
+        for(let i=0; i<db.length;i++){
+            if(db[i].length==currentLen){
+                $('.userContainer').append(`<div class='userItem' id='c${db[i].code}'>
+                <span>${db[i].code}</span>
+                <span>${db[i].name}</span>
+                <span>${db[i].age}</span>
+                </div>`);
+            }
+        
+         }
+      });
+      $('#valInput').on('input', function(){
+        let currentVal=$('#valInput').val();
+        $('#valValue').text(currentVal);
+        $('.userContainer').empty();
+        for(let i=0; i<db.length;i++){
+            if(db[i].code==currentVal){
+                $('.userContainer').append(`<div class='userItem' id='c${db[i].code}'>
+                <span>${db[i].code}</span>
+                <span>${db[i].name}</span>
+                <span>${db[i].age}</span>
+                </div>`);
+            }
+        
+         }
+      });
+      $('#sortBtn').click(function(){
+        $('.userContainer').empty();
+        for(let i=0; i<db.length; i++){
+            if(db.sort(function(a, b){
+                return a.code-b.code;
+            })){
+                $('.userContainer').append(`<div class='userItem' id='c${db[i].code}'>
+                <span>${db[i].code}</span>
+                <span>${db[i].name}</span>
+                <span>${db[i].age}</span>
+                </div>`);
+            }
+      }});
+      $('#sortBtnA').click(function(){
+        $('.userContainer').empty();
+        for(let i=0; i<db.length; i++){
+            if(db.sort(function(a, b){
+                if (a.name < b.name) {
+                    return -1;
+                  }
+                  if (a.name > b.name) {
+                    return 1;
+                  }
+                  return 0;
+            })){
+                $('.userContainer').append(`<div class='userItem' id='c${db[i].code}'>
+                <span>${db[i].code}</span>
+                <span>${db[i].name}</span>
+                <span>${db[i].age}</span>
+                </div>`);
+            }
+        }
+      });
+      $('#clearContainer').click(()=>{
+        $('.userContainer').empty();
+      });
+      
+    </script>
+</body>
+</html>
